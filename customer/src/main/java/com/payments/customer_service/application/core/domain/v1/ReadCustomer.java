@@ -8,7 +8,9 @@ public record ReadCustomer(
         String fullName,
         String identificationNumber,
         String dateOfBirth,
-        String phoneNumber
+        String email,
+        String phoneNumber,
+        String companyName
 ) {
 
 }

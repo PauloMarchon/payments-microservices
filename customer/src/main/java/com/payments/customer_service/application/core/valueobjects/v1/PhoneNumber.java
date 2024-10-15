@@ -1,4 +1,4 @@
-package com.payments.customer_service.application.core.domain.v1;
+package com.payments.customer_service.application.core.valueobjects.v1;
 
 public class PhoneNumber {
     private final String number;

@@ -8,7 +8,7 @@ import com.payments.customer_service.application.core.valueobjects.v1.PhoneNumbe
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class Company {
+public class Company implements Addressable {
     private UUID id;
     private IdentificationNumber identificationNumber;
     private String companyName;
@@ -17,9 +17,9 @@ public class Company {
     private Email email;
     private PhoneNumber phoneNumber;
     private Address address;
-    private Customer customer;
+    private UUID customerRef;
 
-    private Company(UUID id, IdentificationNumber identificationNumber, String companyName, String fantasyName, LocalDate openingDate, Email email, PhoneNumber phoneNumber, Address address, Customer customer) {
+    private Company(UUID id, IdentificationNumber identificationNumber, String companyName, String fantasyName, LocalDate openingDate, Email email, PhoneNumber phoneNumber, Address address, UUID customerRef) {
         this.id = id;
         this.identificationNumber = identificationNumber;
         this.companyName = companyName;
@@ -28,10 +28,10 @@ public class Company {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.customer = customer;
+        this.customerRef = customerRef;
     }
 
-    public static Company create(IdentificationNumber identificationNumber, String companyName, String fantasyName, LocalDate openingDate, Email email, PhoneNumber phoneNumber, Address address, Customer customer) {
+    public static Company create(IdentificationNumber identificationNumber, String companyName, String fantasyName, LocalDate openingDate, Email email, PhoneNumber phoneNumber, Address address, UUID customerRef) {
         if (companyName == null || companyName.isEmpty())
             throw new IllegalArgumentException("Company name cannot be null or empty");
 
@@ -41,7 +41,7 @@ public class Company {
         if (openingDate == null || openingDate.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Opening date cannot be in the past");
 
-        if (customer == null)
+        if (customerRef == null)
             throw new IllegalArgumentException("Customer cannot be null");
 
         return new Company(
@@ -53,7 +53,7 @@ public class Company {
                 email,
                 phoneNumber,
                 address,
-                customer
+                customerRef
         );
     }
 
@@ -103,7 +103,15 @@ public class Company {
         return address;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public UUID getCustomerRef() {
+        return customerRef;
+    }
+
+    @Override
+    public void changeAddress(Address newAddress) {
+        if (newAddress == null)
+            throw new IllegalArgumentException("Address cannot be null");
+
+        this.address = newAddress;
     }
 }

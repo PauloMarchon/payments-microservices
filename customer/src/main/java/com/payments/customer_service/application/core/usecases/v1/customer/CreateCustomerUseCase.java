@@ -1,12 +1,12 @@
 package com.payments.customer_service.application.core.usecases.v1.customer;
 
 import com.payments.customer_service.application.core.domain.v1.Customer;
-import com.payments.customer_service.application.core.domain.v1.IdentificationNumber;
-import com.payments.customer_service.application.core.domain.v1.PhoneNumber;
+import com.payments.customer_service.application.core.valueobjects.v1.Email;
+import com.payments.customer_service.application.core.valueobjects.v1.IdentificationNumber;
+import com.payments.customer_service.application.core.valueobjects.v1.PhoneNumber;
 import com.payments.customer_service.application.core.usecases.repositories.v1.CustomerRepository;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public interface CreateCustomerUseCase {
 
@@ -15,9 +15,9 @@ public interface CreateCustomerUseCase {
     record Request(
             String fullName,
             IdentificationNumber identificationNumber,
-            PhoneNumber phoneNumber,
-            LocalDate dateOfBirth,
-            String addressRef
+            LocalDate birthDate,
+            Email email,
+            PhoneNumber phoneNumber
     ) {
 
     }
@@ -37,33 +37,13 @@ public interface CreateCustomerUseCase {
 
         @Override
         public CreateCustomerUseCase.Response execute(CreateCustomerUseCase.Request requestData) {
-            if (requestData.fullName == null || requestData.fullName.isEmpty()) {
-                throw new IllegalArgumentException("Full name cannot be null or empty");
-            }
-
-            if (requestData.identificationNumber == null) {
-                throw new IllegalArgumentException("Identification number cannot be null");
-            }
-
-            if (requestData.dateOfBirth == null) {
-                throw new IllegalArgumentException("Date of birth cannot be null");
-            }
-
-            if (requestData.addressRef != null) {
-                try {
-                    UUID.fromString(requestData.addressRef);
-                } catch (Exception e) {
-                    throw new IllegalArgumentException("Invalid address ref", e);
-                }
-            }
-
-            Customer customer = Customer.builder()
-                    .id(UUID.randomUUID())
-                    .fullName(requestData.fullName)
-                    .identificationNumber(requestData.identificationNumber)
-                    .dateOfBirth(requestData.dateOfBirth)
-                    .phoneNumber(requestData.phoneNumber)
-                    .build();
+            Customer customer = Customer.create(
+                    requestData.fullName,
+                    requestData.identificationNumber,
+                    requestData.birthDate,
+                    requestData.email,
+                    requestData.phoneNumber
+            );
 
             return new CreateCustomerUseCase.Response(
                     customerRepository.save(customer)

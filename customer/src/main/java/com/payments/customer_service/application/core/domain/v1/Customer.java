@@ -9,50 +9,62 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Customer implements Addressable {
-    private UUID id;
+    private final UUID id;
     private String fullName;
     private IdentificationNumber identificationNumber;
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
     private Email email;
     private PhoneNumber phoneNumber;
     private Address address;
     private UUID companyRef;
 
-    private Customer(UUID id, String fullName, IdentificationNumber identificationNumber, LocalDate dateOfBirth, Email email, PhoneNumber phoneNumber, Address address, UUID companyRef) {
+    private Customer(UUID id, String fullName, IdentificationNumber identificationNumber, LocalDate birthDate, Email email, PhoneNumber phoneNumber) {
         this.id = id;
         this.fullName = fullName;
         this.identificationNumber = identificationNumber;
-        this.dateOfBirth = dateOfBirth;
+        this.birthDate = birthDate;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.companyRef = companyRef;
     }
 
-    public static Customer create(String fullName, IdentificationNumber identificationNumber, LocalDate dateOfBirth, Email email, PhoneNumber phoneNumber, Address address, UUID companyRef) {
-        if (fullName == null || fullName.trim().isEmpty())
+    public static Customer create(String fullName, IdentificationNumber identificationNumber, LocalDate birthDate, Email email, PhoneNumber phoneNumber) {
+        if (fullName == null || fullName.isEmpty())
             throw new IllegalArgumentException("Full name cannot be null or empty");
 
-        if (dateOfBirth == null || dateOfBirth.isAfter(LocalDate.now()))
+        if (birthDate == null || birthDate.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Date of birth cannot be in the future");
 
         return new Customer(
                 UUID.randomUUID(),
                 fullName,
                 identificationNumber,
-                dateOfBirth,
+                birthDate,
                 email,
-                phoneNumber,
-                address,
-                companyRef
+                phoneNumber
         );
     }
 
-    public void changeFullName(String newFullName) {
-        if (newFullName == null || newFullName.isEmpty())
+    public void changeFullName(String fullName) {
+        if (fullName == null || fullName.isEmpty())
             throw new IllegalArgumentException("The full name cannot be null or empty");
 
-        this.fullName = newFullName;
+        this.fullName = fullName;
+    }
+
+    public void changeIdentificationNumber(IdentificationNumber identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+
+    public void changeBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void changeEmail(Email email) {
+        this.email = email;
+    }
+
+    public void changePhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void assignCompany(UUID companyRef) {
@@ -74,8 +86,8 @@ public class Customer implements Addressable {
         return identificationNumber;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public Email getEmail() {

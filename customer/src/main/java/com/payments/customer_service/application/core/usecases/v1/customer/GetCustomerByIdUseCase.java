@@ -1,45 +1,45 @@
 package com.payments.customer_service.application.core.usecases.v1.customer;
 
 import com.payments.customer_service.application.core.domain.v1.Customer;
-import com.payments.customer_service.application.core.valueobjects.v1.IdentificationNumber;
 import com.payments.customer_service.application.core.domain.v1.ReadCustomer;
 import com.payments.customer_service.application.core.usecases.repositories.v1.CustomerRepository;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.UUID;
 
-public interface FindCustomerByIdentificationNumberUseCase {
+public interface GetCustomerByIdUseCase {
 
     Response execute(Request requestData);
 
     record Request(
-        IdentificationNumber identificationNumber
+            UUID customerRef
     ) {
 
     }
 
     record Response(
-        ReadCustomer readCustomer
+            ReadCustomer customer
     ) {
 
     }
 
-    class DefaultFindCustomerByIdentificationNumberUseCase implements FindCustomerByIdentificationNumberUseCase {
+    class DefaultGetCustomerByIdUseCase implements GetCustomerByIdUseCase {
         private final CustomerRepository customerRepository;
 
-        public DefaultFindCustomerByIdentificationNumberUseCase(CustomerRepository customerRepository) {
+        public DefaultGetCustomerByIdUseCase(CustomerRepository customerRepository) {
             this.customerRepository = customerRepository;
         }
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.identificationNumber == null)
-                throw new IllegalArgumentException("indentification number must not be null or empty");
+            if (requestData.customerRef == null)
+                throw new IllegalArgumentException("ref must not be null");
 
-            Customer customer = customerRepository.findByIdentificationNumber(requestData.identificationNumber)
-                    .orElseThrow(() -> new IllegalArgumentException("indentification number not found"));
+           Customer customer = customerRepository.findById(requestData.customerRef)
+                            .orElseThrow(() -> new IllegalArgumentException("customer with id not found"));
 
-            return new DefaultFindCustomerByIdentificationNumberUseCase.Response(
+            return new GetCustomerByIdUseCase.Response(
                     ReadCustomer.builder()
                             .ref(customer.getId().toString())
                             .fullName(customer.getFullName())

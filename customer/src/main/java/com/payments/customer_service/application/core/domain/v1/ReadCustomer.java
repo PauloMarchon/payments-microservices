@@ -10,7 +10,7 @@ public record ReadCustomer(
         String dateOfBirth,
         String email,
         String phoneNumber,
-        String companyName
+        ReadCompany company
 ) {
 
 }

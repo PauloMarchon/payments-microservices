@@ -9,7 +9,7 @@ public interface DeleteCustomerUseCase {
     Response execute(Request requestData);
 
     record Request(
-            String ref
+            UUID customerRef
     ) {
 
     }
@@ -29,16 +29,10 @@ public interface DeleteCustomerUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.ref == null) {
+            if (requestData.customerRef == null)
                 throw new IllegalArgumentException("ref is null");
-            } else {
-                try {
-                    UUID.fromString(requestData.ref);
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException("ref is invalid");
-                }
-            }
-            customerRepository.delete(UUID.fromString(requestData.ref));
+
+            customerRepository.delete(requestData.customerRef);
 
             return new DeleteCustomerUseCase.Response();
         }

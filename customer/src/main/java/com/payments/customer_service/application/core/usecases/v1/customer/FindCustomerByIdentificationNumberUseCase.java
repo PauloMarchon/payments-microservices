@@ -36,7 +36,7 @@ public interface FindCustomerByIdentificationNumberUseCase {
             Customer customer = customerRepository.findByIdentificationNumber(requestData.identificationNumber())
                     .orElseThrow(() -> new IllegalArgumentException("indentification number not found"));
 
-            return new DefaultFindCustomerByIdentificationNumberUseCase.Response(
+            return new FindCustomerByIdentificationNumberUseCase.Response(
                     ReadCustomer.from(customer)
             );
         }

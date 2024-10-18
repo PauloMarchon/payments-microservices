@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface CompanyRepository {
     Optional<Company> findById(UUID ref);
     Optional<Company> findByIdentificationNumber(IdentificationNumber identificationNumber);
-    void save(Company company);
+    String save(Company company);
     void delete(UUID ref);
 }

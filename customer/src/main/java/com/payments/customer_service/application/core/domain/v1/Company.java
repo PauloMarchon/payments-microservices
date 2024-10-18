@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Company implements Addressable {
-    private UUID id;
+    private final UUID id;
     private IdentificationNumber identificationNumber;
     private String companyName;
     private String fantasyName;
@@ -41,6 +41,9 @@ public class Company implements Addressable {
         if (openingDate == null || openingDate.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Opening date cannot be in the past");
 
+        if (address == null)
+            throw new IllegalArgumentException("Address cannot be null");
+
         if (customerRef == null)
             throw new IllegalArgumentException("Customer cannot be null");
 
@@ -57,18 +60,37 @@ public class Company implements Addressable {
         );
     }
 
-    public void changeCompanyName(String newCompanyName) {
-        if (newCompanyName == null || newCompanyName.isEmpty())
-            throw new IllegalArgumentException("Company name cannot be null or empty");
-
-        this.companyName = newCompanyName;
+    public void changeIdentificationNumber(IdentificationNumber identificationNumber) {
+        this.identificationNumber = identificationNumber;
     }
 
-    public void changeFantasyName(String newFantasyName) {
-        if (newFantasyName == null || newFantasyName.isEmpty())
+    public void changeCompanyName(String companyName) {
+        if (companyName == null || companyName.isEmpty())
+            throw new IllegalArgumentException("Company name cannot be null or empty");
+
+        this.companyName = companyName;
+    }
+
+    public void changeFantasyName(String fantasyName) {
+        if (fantasyName == null || fantasyName.isEmpty())
             throw new IllegalArgumentException("Fantasy name cannot be null or empty");
 
-        this.fantasyName = newFantasyName;
+        this.fantasyName = fantasyName;
+    }
+
+    public void changeOpeningDate(LocalDate openingDate) {
+        if (openingDate == null || openingDate.isAfter(LocalDate.now()))
+            throw new IllegalArgumentException("Opening date cannot be in the past");
+
+        this.openingDate = openingDate;
+    }
+
+    public void changeEmail(Email email) {
+        this.email = email;
+    }
+
+    public void changePhoneNumber(PhoneNumber phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public UUID getId() {

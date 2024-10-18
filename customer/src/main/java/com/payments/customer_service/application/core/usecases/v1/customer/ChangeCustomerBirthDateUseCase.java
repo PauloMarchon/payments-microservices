@@ -33,16 +33,16 @@ public interface ChangeCustomerBirthDateUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.customerRef == null)
+            if (requestData.customerRef() == null)
                 throw new IllegalArgumentException("CustomerRef is null");
 
-            if (requestData.birthDate == null || requestData.birthDate.isAfter(LocalDate.now()))
+            if (requestData.birthDate() == null || requestData.birthDate().isAfter(LocalDate.now()))
                 throw new IllegalArgumentException("BirthDate is invalid");
 
-            Customer customer = customerRepository.findById(requestData.customerRef)
+            Customer customer = customerRepository.findById(requestData.customerRef())
                     .orElseThrow(() -> new ResourceNotFoundException("CustomerRef not found"));
 
-            customer.changeBirthDate(requestData.birthDate);
+            customer.changeBirthDate(requestData.birthDate());
 
             customerRepository.save(customer);
 

@@ -38,11 +38,11 @@ public interface CreateCustomerUseCase {
         @Override
         public CreateCustomerUseCase.Response execute(CreateCustomerUseCase.Request requestData) {
             Customer customer = Customer.create(
-                    requestData.fullName,
-                    requestData.identificationNumber,
-                    requestData.birthDate,
-                    requestData.email,
-                    requestData.phoneNumber
+                    requestData.fullName(),
+                    requestData.identificationNumber(),
+                    requestData.birthDate(),
+                    requestData.email(),
+                    requestData.phoneNumber()
             );
 
             return new CreateCustomerUseCase.Response(

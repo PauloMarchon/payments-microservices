@@ -5,9 +5,6 @@ import com.payments.customer_service.application.core.valueobjects.v1.Identifica
 import com.payments.customer_service.application.core.domain.v1.ReadCustomer;
 import com.payments.customer_service.application.core.usecases.repositories.v1.CustomerRepository;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-
 public interface FindCustomerByIdentificationNumberUseCase {
 
     Response execute(Request requestData);
@@ -33,21 +30,14 @@ public interface FindCustomerByIdentificationNumberUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.identificationNumber == null)
+            if (requestData.identificationNumber() == null)
                 throw new IllegalArgumentException("indentification number must not be null or empty");
 
-            Customer customer = customerRepository.findByIdentificationNumber(requestData.identificationNumber)
+            Customer customer = customerRepository.findByIdentificationNumber(requestData.identificationNumber())
                     .orElseThrow(() -> new IllegalArgumentException("indentification number not found"));
 
             return new DefaultFindCustomerByIdentificationNumberUseCase.Response(
-                    ReadCustomer.builder()
-                            .ref(customer.getId().toString())
-                            .fullName(customer.getFullName())
-                            .identificationNumber(customer.getIdentificationNumber().getNumber())
-                            .dateOfBirth(customer.getBirthDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)))
-                            .email(customer.getEmail().getEmail())
-                            .phoneNumber(customer.getPhoneNumber().getNumber())
-                            .build()
+                    ReadCustomer.from(customer)
             );
         }
     }

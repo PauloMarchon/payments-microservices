@@ -29,10 +29,10 @@ public interface DeleteCustomerUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.customerRef == null)
+            if (requestData.customerRef() == null)
                 throw new IllegalArgumentException("ref is null");
 
-            customerRepository.delete(requestData.customerRef);
+            customerRepository.delete(requestData.customerRef());
 
             return new DeleteCustomerUseCase.Response();
         }

@@ -32,16 +32,16 @@ public interface ChangeCustomerNameUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.customerRef == null)
+            if (requestData.customerRef() == null)
                 throw new IllegalArgumentException("CustomerRef is null");
 
-            if (requestData.fullName == null || requestData.fullName.isEmpty())
+            if (requestData.fullName() == null || requestData.fullName().isEmpty())
                 throw new IllegalArgumentException("FullName is null or empty");
 
-            Customer customer = customerRepository.findById(requestData.customerRef)
+            Customer customer = customerRepository.findById(requestData.customerRef())
                     .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-            customer.changeFullName(requestData.fullName);
+            customer.changeFullName(requestData.fullName());
 
             customerRepository.save(customer);
 

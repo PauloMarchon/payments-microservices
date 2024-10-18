@@ -33,13 +33,13 @@ public interface ChangeCustomerEmailUseCase {
 
         @Override
         public Response execute(Request requestData) {
-            if (requestData.customerRef == null)
+            if (requestData.customerRef() == null)
                 throw new IllegalArgumentException("CustomerRef is null");
 
-            Customer customer = customerRepository.findById(requestData.customerRef)
+            Customer customer = customerRepository.findById(requestData.customerRef())
                     .orElseThrow(() -> new ResourceNotFoundException("CustomerRef not found"));
 
-            customer.changeEmail(requestData.email);
+            customer.changeEmail(requestData.email());
 
             customerRepository.save(customer);
 
